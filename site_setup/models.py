@@ -1,8 +1,9 @@
 from django.db import models
+from utils.model_validators import validate_png
 
 class MenuLink(models.Model):
     class Meta:
-        verbose_name = 'Menu Link'
+        verbose_name = 'Menu Link'  
         verbose_name_plural = 'Menu Links'
 
     text = models.CharField(max_length=50)
@@ -34,6 +35,7 @@ class SiteSetup(models.Model):
     favicon = models.ImageField(
         upload_to='assets/favicon/%Y/%m/',
         blank=True, default='',
+        validators=[validate_png],
     )
 
 
