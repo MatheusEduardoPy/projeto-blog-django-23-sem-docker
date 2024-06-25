@@ -38,6 +38,13 @@ class SiteSetup(models.Model):
         validators=[validate_png],
     )
 
+    def save(self,*args,**kwargs):
+        
+
+        print()
+
+        super().save(*args,**kwargs)
+        print("Depois de salvar")
 
     def __str__(self):
         return self.title
