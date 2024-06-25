@@ -39,12 +39,14 @@ class SiteSetup(models.Model):
     )
 
     def save(self,*args,**kwargs):
-        
-
-        print()
-
+        current_favicon_name= str(self.favicon.name)
         super().save(*args,**kwargs)
-        print("Depois de salvar")
+        favicon_changed = False
+        if self.favicon:
+            favicon_changed = current_favicon_name != self.favicon.name
+
+        print('favicon_changed', favicon_changed)
+
 
     def __str__(self):
         return self.title
