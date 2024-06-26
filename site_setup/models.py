@@ -1,6 +1,6 @@
 from django.db import models
 from utils.model_validators import validate_png
-
+from utils.images import resize_image
 class MenuLink(models.Model):
     class Meta:
         verbose_name = 'Menu Link'  
@@ -45,7 +45,9 @@ class SiteSetup(models.Model):
         if self.favicon:
             favicon_changed = current_favicon_name != self.favicon.name
 
-        print('favicon_changed', favicon_changed)
+        if favicon_changed:
+            resize_image(self.favicon, 32)
+            
 
 
     def __str__(self):
