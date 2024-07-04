@@ -94,7 +94,7 @@ class Post(models.Model):
         User,
         on_delete=models.SET_NULL,
         blank=True, null=True,
-        related_name='post_created_by'
+        related_name='post_updated_by'
     )
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True,
