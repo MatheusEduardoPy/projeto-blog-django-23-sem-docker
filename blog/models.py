@@ -70,11 +70,17 @@ class Page(models.Model):
     )
     is_published = models.BooleanField(
         default=False,
-        help_text=("Esse campo precisa estar marcado "
-                   "para a página ser exibida publicamente")
-        )
+        help_text=(
+           "Esse campo precisa estar marcado "
+           "para a página ser exibida publicamente"
+        ),
+    )
     content = models.TextField()
-    
+    def get_absolute_url(self): 
+        if not self.is_published:
+            return reverse('blog:index')
+        return reverse('blog:page', args=(self.slug,))
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify_new(self.title, 5)
@@ -108,6 +114,7 @@ class Post(models.Model):
         help_text=("Esse campo precisa estar marcado "
                    "para o post ser exibido publicamente")
         )
+    
     content = models.TextField()
     cover = models.ImageField(upload_to='posts/%Y/%m/', blank=True, default='')
     cover_in_post_content = models.BooleanField(
