@@ -10,9 +10,28 @@ from django.contrib.auth.models import User
 
 from django.http import Http404
 
+from django.views.generic import ListView
+
+
 PER_PAGE = 9
 
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/pages/index.html'
+    context_object_name = 'page_obj'
+    ordering = '-id',
+    paginate_by = PER_PAGE
+
 def index(request):
+    """
+    Function Based Views -> São funções
+    Class Based Views -> São classes (POO)
+    Obter dados do model
+    Esses dados são uma lista de objetos
+    Paginação
+    Renderizando um template
+    Manipulando o contexto
+    """
     posts = Post.objects.get_published() # type: ignore
         
 
@@ -146,7 +165,7 @@ def page(request, slug):
             'page': page_obj,
             'page_title': page_title, 
         }
-    )
+    )   
 
 
 def post(request, slug):
