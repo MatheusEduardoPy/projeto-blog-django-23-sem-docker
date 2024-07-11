@@ -16,37 +16,19 @@ from django.views.generic import ListView
 PER_PAGE = 9
 
 class PostListView(ListView):
-    model = Post
     template_name = 'blog/pages/index.html'
-    context_object_name = 'page_obj'
-    ordering = '-id',
+    context_object_name = 'posts'
     paginate_by = PER_PAGE
+    queryset = Post.objects.get_published() # type: ignore
 
-def index(request):
-    """
-    Function Based Views -> São funções
-    Class Based Views -> São classes (POO)
-    Obter dados do model
-    Esses dados são uma lista de objetos
-    Paginação
-    Renderizando um template
-    Manipulando o contexto
-    """
-    posts = Post.objects.get_published() # type: ignore
-        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    paginator = Paginator(posts, per_page=PER_PAGE)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    return render(
-        request,
-        'blog/pages/index.html',
-        {
-            'page_obj': page_obj,
+        context.update({
             'page_title': 'Home - ',
-        }
-    )
+        })
+
+        return context
 
 def created_by(request, author_id):
     user = User.objects.filter(pk=author_id).first()
@@ -74,6 +56,27 @@ def created_by(request, author_id):
             'page_title': page_title,
         }
     )
+
+class CreatedByListView(PostListView):
+    def get_context_data(self, **kwargs): 
+        context = super().get_context_data(**kwargs) 
+        author_id = 1
+        user = User.objects.filter(pk=author_id).first()
+
+        if user is None:
+            raise Http404("O usuário não existe")
+
+        user_full_name = user.username
+
+        if user.first_name:
+            user_full_name = f'{user.first_name} {user.last_name}'
+        page_title = 'Posts de ' + user_full_name + ' - '
+
+        context.update({
+            'page_title': page_title
+        })
+
+        return context
 
 def category(request, slug):
     posts = (Post.objects.get_published() # type:ignore
