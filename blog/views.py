@@ -60,6 +60,9 @@ def created_by(request, author_id):
 class CreatedByListView(PostListView):
     def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs) 
+
+        print('ARGUMENTOS', self.kwargs)
+
         author_id = 1
         user = User.objects.filter(pk=author_id).first()
 
