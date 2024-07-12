@@ -162,27 +162,8 @@ class PageDetailView(DetailView):
     def get_queryset(self):
         return super().get_queryset().filter(is_published=True)
 
-def page(request, slug): 
-    page_obj = (
-    Page.objects.filter(is_published=True) # type: ignore
-        .filter(slug=slug)
-        .first()
-             ) 
+
     
-    if page_obj is None:
-        raise Http404()
-
-    page_title = f'{page_obj.title} - Página - '
-
-    return render( 
-        request,
-        'blog/pages/page.html',
-        { 
-            'page': page_obj,
-            'page_title': page_title, 
-        }
-    )   
-
 
 def post(request, slug):
     post_obj = (
